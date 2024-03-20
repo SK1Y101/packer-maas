@@ -21,16 +21,16 @@ source "qemu" "cloudimg" {
   iso_checksum   = "file:https://cloud-images.ubuntu.com/${var.ubuntu_series}/current/SHA256SUMS"
   iso_url        = "https://cloud-images.ubuntu.com/${var.ubuntu_series}/current/${var.ubuntu_series}-server-cloudimg-${var.architecture}.img"
   memory         = 2048
-  qemu_binary    = "qemu-system-${lookup(local.qemu_arch, var.architecture, "")}"
+  qemu_binary    = "qemu-system-${lookup(var.qemu_arch, var.architecture, "")}"
   qemu_img_args {
     create = ["-F", "qcow2"]
   }
   qemuargs = [
-    ["-machine", "${lookup(local.qemu_machine, var.architecture, "")}"],
-    ["-cpu", "${lookup(local.qemu_cpu, var.architecture, "")}"],
+    ["-machine", "${lookup(var.qemu_machine, var.architecture, "")}"],
+    ["-cpu", "${lookup(var.qemu_cpu, var.architecture, "")}"],
     ["-device", "virtio-gpu-pci"],
-    ["-drive", "if=pflash,format=raw,id=ovmf_code,readonly=on,file=/usr/share/${lookup(local.uefi_imp, var.architecture, "")}/${lookup(local.uefi_imp, var.architecture, "")}_CODE.fd"],
-    ["-drive", "if=pflash,format=raw,id=ovmf_vars,file=${lookup(local.uefi_imp, var.architecture, "")}_VARS.fd"],
+    ["-drive", "if=pflash,format=raw,id=ovmf_code,readonly=on,file=/usr/share/${lookup(var.uefi_imp, var.architecture, "")}/${lookup(var.uefi_imp, var.architecture, "")}_CODE.fd"],
+    ["-drive", "if=pflash,format=raw,id=ovmf_vars,file=${lookup(var.uefi_imp, var.architecture, "")}_VARS.fd"],
     ["-drive", "file=output-cloudimg/packer-cloudimg,format=qcow2"],
     ["-drive", "file=seeds-cloudimg.iso,format=raw"]
   ]
@@ -49,7 +49,7 @@ build {
 
   provisioner "shell-local" {
     inline = [
-      "cp /usr/share/${lookup(local.uefi_imp, var.architecture, "")}/${lookup(local.uefi_imp, var.architecture, "")}_VARS.fd ${lookup(local.uefi_imp, var.architecture, "")}_VARS.fd",
+      "cp /usr/share/${lookup(var.uefi_imp, var.architecture, "")}/${lookup(var.uefi_imp, var.architecture, "")}_VARS.fd ${lookup(var.uefi_imp, var.architecture, "")}_VARS.fd",
       "cloud-localds seeds-cloudimg.iso user-data-cloudimg meta-data"
     ]
     inline_shebang = "/bin/bash -e"
