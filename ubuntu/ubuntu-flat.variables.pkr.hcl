@@ -12,13 +12,6 @@ variable "flat_filename" {
 
 variable "ubuntu_iso" {
   type        = string
-  default     = "ubuntu-22.04.3-live-server-amd64.iso"
+  default     = "ubuntu-22.04.3-live-server"
   description = "The ISO name to build the image from"
 }
-
-variable "architecture" {
-  type        = string
-  default     = "amd64"
-  description = "The architecture to build the image for (amd64 or arm64)"
-}
-
