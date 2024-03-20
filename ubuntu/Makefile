@@ -12,7 +12,7 @@ URL ?= http://releases.ubuntu.com
 SUMS ?= SHA256SUMS
 TIMEOUT ?= 1h
 
-ISO=$(shell wget -O- -q ${URL}/${SERIES}/${SUMS} | grep live-server | cut -d'*' -f2)
+ISO=$(shell wget -O- -q ${URL}/${SERIES}/${SUMS} | grep live-server | rev | cut -d'*' -f1 | cut -d'-' -f2- | rev)
 
 .PHONY: all clean
 
