@@ -8,6 +8,27 @@ packer {
   }
 }
 
+
+qemu_arch = {
+  "amd64" = "x86_64"
+  "arm64" = "aarch64"
+}
+
+uefi_imp = {
+  "amd64" = "OVMF"
+  "arm64" = "AAVMF"
+}
+
+qemu_machine = {
+  "amd64" = "ubuntu,accel=kvm"
+  "arm64" = "virt"
+}
+
+qemu_cpu = {
+  "amd64" = "host"
+  "arm64" = "cortex-a57"
+}
+
 variable "headless" {
   type        = bool
   default     = true
