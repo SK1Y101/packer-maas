@@ -1,7 +1,7 @@
 locals {
   url_base = {
     "amd64" = "releases.ubuntu.com/${var.ubuntu_series}"
-    "arm64" = "cdimage.ubuntu.com/releases/${var.ubuntu_series}/releases"
+    "arm64" = "cdimage.ubuntu.com/releases/${var.ubuntu_series}/release"
   }
 }
 
@@ -19,9 +19,9 @@ source "qemu" "flat" {
   memory          = 2048
   qemu_binary    = "qemu-system-${lookup(var.qemu_arch, var.architecture, "")}"
   qemuargs = [
+    ["-vga", "qxl"],
     ["-machine", "${lookup(var.qemu_machine, var.architecture, "")}"],
     ["-cpu", "${lookup(var.qemu_cpu, var.architecture, "")}"],
-    ["-vga", "qxl"],
     ["-device", "virtio-blk-pci,drive=drive0,bootindex=0"],
     ["-device", "virtio-blk-pci,drive=cdrom0,bootindex=1"],
     ["-device", "virtio-blk-pci,drive=drive1,bootindex=2"],
