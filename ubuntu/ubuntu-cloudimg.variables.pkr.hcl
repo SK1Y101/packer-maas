@@ -1,9 +1,3 @@
-variable "ubuntu_series" {
-  type        = string
-  default     = "jammy"
-  description = "The codename of the Ubuntu series to build."
-}
-
 variable "filename" {
   type        = string
   default     = "custom-cloudimg.tar.gz"

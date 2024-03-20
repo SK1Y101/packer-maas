@@ -49,6 +49,18 @@ variable "ssh_ubuntu_password" {
   default = "ubuntu"
 }
 
+variable "ubuntu_series" {
+  type        = string
+  default     = "jammy"
+  description = "The codename of the Ubuntu series to build."
+}
+
+variable "architecture" {
+  type        = string
+  default     = "amd64"
+  description = "The architecture to build the image for (amd64 or arm64)"
+}
+
 variable "timeout" {
   type        = string
   default     = "1h"
