@@ -14,22 +14,22 @@ source "qemu" "flat" {
   headless        = var.headless
   http_directory  = var.http_directory
   iso_checksum    = "file:http://${lookup(local.url_base, var.architecture, "")}/SHA256SUMS"
-  iso_target_path = "packer_cache/${var.ubuntu_series}.iso"
+  iso_target_path = "packer_cache/${var.ubuntu_series}/${var.architecture}.iso"
   iso_url         = "https://${lookup(local.url_base, var.architecture, "")}/${var.ubuntu_iso}-${var.architecture}.iso"
   memory          = 2048
   qemu_binary    = "qemu-system-${lookup(var.qemu_arch, var.architecture, "")}"
   qemuargs = [
-    ["-vga", "qxl"],
+    ["-device", "virtio-gpu-pci"],
     ["-machine", "${lookup(var.qemu_machine, var.architecture, "")}"],
     ["-cpu", "${lookup(var.qemu_cpu, var.architecture, "")}"],
     ["-device", "virtio-blk-pci,drive=drive0,bootindex=0"],
     ["-device", "virtio-blk-pci,drive=cdrom0,bootindex=1"],
     ["-device", "virtio-blk-pci,drive=drive1,bootindex=2"],
     ["-drive", "if=pflash,format=raw,readonly=on,file=/usr/share/${lookup(var.uefi_imp, var.architecture, "")}/${lookup(var.uefi_imp, var.architecture, "")}_CODE.fd"],
-    ["-drive", "if=pflash,format=raw,file=${lookup(var.uefi_imp, var.architecture, "")}_VARS.fd"],
+    ["-drive", "if=pflash,format=raw,id=ovmf_vars,file=${lookup(var.uefi_imp, var.architecture, "")}_VARS.fd"],
     ["-drive", "file=output-flat/packer-flat,if=none,id=drive0,cache=writeback,discard=ignore,format=raw"],
     ["-drive", "file=seeds-flat.iso,format=raw,cache=none,if=none,id=drive1,readonly=on"],
-    ["-drive", "file=packer_cache/${var.ubuntu_series}.iso,if=none,id=cdrom0,media=cdrom"]
+    ["-drive", "file=acker_cache/${var.ubuntu_series}/${var.architecture}.iso,if=none,id=cdrom0,media=cdrom"]
   ]
   shutdown_command       = "sudo -S shutdown -P now"
   ssh_handshake_attempts = 500
