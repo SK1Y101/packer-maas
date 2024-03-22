@@ -29,7 +29,7 @@ source "qemu" "flat" {
     ["-drive", "if=pflash,format=raw,id=ovmf_vars,file=${lookup(var.uefi_imp, var.architecture, "")}_VARS.fd"],
     ["-drive", "file=output-flat/packer-flat,if=none,id=drive0,cache=writeback,discard=ignore,format=raw"],
     ["-drive", "file=seeds-flat.iso,format=raw,cache=none,if=none,id=drive1,readonly=on"],
-    ["-drive", "file=acker_cache/${var.ubuntu_series}/${var.architecture}.iso,if=none,id=cdrom0,media=cdrom"]
+    ["-drive", "file=packer_cache/${var.ubuntu_series}/${var.architecture}.iso,if=none,id=cdrom0,media=cdrom"]
   ]
   shutdown_command       = "sudo -S shutdown -P now"
   ssh_handshake_attempts = 500
