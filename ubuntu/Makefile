@@ -36,6 +36,9 @@ seeds-flat.iso: user-data-flat meta-data
 OVMF_VARS.fd: /usr/share/OVMF/OVMF_VARS.fd
 	cp -v $< $@
 
+AAVMF_VARS.fd: /usr/share/AAVMF/AAVMF_VARS.fd
+	cp -v $< $@
+
 custom-cloudimg.tar.gz: check-deps clean
 	${PACKER} init . && ${PACKER} build \
 		-only='cloudimg.*' \
@@ -43,7 +46,7 @@ custom-cloudimg.tar.gz: check-deps clean
 		-var architecture=${ARCH} \
 		-var timeout=${TIMEOUT} .
 
-custom-ubuntu.tar.gz: check-deps clean seeds-flat.iso OVMF_VARS.fd \
+custom-ubuntu.tar.gz: check-deps clean seeds-flat.iso OVMF_VARS.fd AAVMF_VARS.fd \
 			packages/custom-packages.tar.gz
 	${PACKER} init . && ${PACKER} build -only=qemu.flat \
 	    -var ubuntu_series=${SERIES} \
@@ -51,7 +54,7 @@ custom-ubuntu.tar.gz: check-deps clean seeds-flat.iso OVMF_VARS.fd \
 	    -var architecture=${ARCH} \
 		-var timeout=${TIMEOUT} .
 
-custom-ubuntu-lvm.dd.gz: check-deps clean seeds-lvm.iso OVMF_VARS.fd
+custom-ubuntu-lvm.dd.gz: check-deps clean seeds-lvm.iso OVMF_VARS.fd AAVMF_VARS.fd
 	${PACKER} init . && ${PACKER} build -only=qemu.lvm \
 	    -var ubuntu_series=${SERIES} \
 	    -var ubuntu_lvm_iso=${ISO} \
@@ -60,7 +63,7 @@ custom-ubuntu-lvm.dd.gz: check-deps clean seeds-lvm.iso OVMF_VARS.fd
 clean:
 	${RM} -rf output-* custom-*.gz \
 		seeds-flat.iso seeds-lvm.iso seeds-cloudimg.iso \
-		OVMF_VARS.fd
+		OVMF_VARS.fd AAVMF_VARS.fd
 
 CUSTOM_PKGS:=${wildcard packages/*.deb}
 
@@ -71,5 +74,5 @@ else
 	tar czf $@ -C packages ${notdir $^}
 endif
 
-.INTERMEDIATE: OVMF_VARS.fd packages/custom-packages.tar.gz \
+.INTERMEDIATE: OVMF_VARS.fd AAVMF_VARS.fd packages/custom-packages.tar.gz \
 	seeds-flat.iso seeds-lvm.iso seeds-cloudimg.iso
