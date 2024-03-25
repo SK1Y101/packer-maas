@@ -15,9 +15,3 @@ variable "customize_script" {
   default     = "/dev/null"
   description = "The filename of the script that will run in the VM to customize the image."
 }
-
-variable "architecture" {
-  type        = string
-  default     = "amd64"
-  description = "The architecture to build the image for (amd64 or arm64)"
-}
